@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button, View, StyleSheet, Text, ScrollView, SafeAreaView, Image, TouchableOpacity, TouchableHighlight, Dimensions, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
@@ -118,7 +117,6 @@ function SearchScreen({ navigation, route }) {
             setSpinnerDisplay("none");
             setSearchBarEditable("true");
             setSearchBarBackground("white");
-            // Ask search API for results
             navigation.navigate("Results Screen", {query: userQuery});
           }}
         >
@@ -129,56 +127,16 @@ function SearchScreen({ navigation, route }) {
   )
 }
 
-const dbUrl = "https://knafehgram.herokuapp.com";
-async function searchDatabase(userQuery) {
-  let queryResult = null;
-  axios.get(dbUrl, {
-    query: userQuery
-  })
-  .then(function (response) {
-    queryResult = response.data;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-  return queryResult
-}
-
 // RESULTS SCREEN
-const fakeData = [
-  {id: 1, name: "A"},
-  {id: 2, name: "B"},
-  {id: 3, name: "C"},
-];
-
-const renderResult = ({item}) => {
-  return (
-    <View style={{width: "100%"}}>
-      <Text>{item.name}</Text>
-    </View>
-  );
-};
 
 function ResultsScreen({ navigation, route }) {
   const query = route.params.query;
-  const [results, setResults] = useState([]);
-  //console.log("In results screen");
-  useEffect(() => {
-    axios.get(dbUrl, {'query':'Jeff'})
-    .then(function(response){
-      //console.log(response.data);
-      setResults(response.data);
-    });
-  });
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <FlatList 
-        data={fakeData}
-        renderItem={renderResult}
-        keyExtractor={item=>item.id}
-        style={{width:"100%"}}
-      />
-    </SafeAreaView>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>
+        Here are your results for query "{query}" :)
+      </Text>
+    </View>
   );
 }
 
