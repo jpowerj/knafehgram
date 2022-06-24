@@ -132,12 +132,6 @@ function SearchScreen({ navigation, route }) {
 
 const dbUrl = "https://knafehgram.herokuapp.com";
 
-const MyItemSeparator = () => {
-  return (
-    <View style={{backgroundColor: "black", height:1, width:"100%", marginRight: 2}} />
-  );
-}
-
 // RESULTS SCREEN
 
 function ResultsScreen({ navigation, route }) {
@@ -171,6 +165,11 @@ function ResultsScreen({ navigation, route }) {
       </View>
     );
   };
+  const MyItemSeparator = () => {
+    return (
+      <View style={{backgroundColor: "black", height:1, width:"100%", marginRight: 2}} />
+    );
+  }
   return (
       <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator style={{display: resultsLoaded ? 'none' : 'block' }} />
@@ -191,100 +190,6 @@ function ViewResultScreen({ navigation, route }) {
   return (
     <View>
       <Text>Viewing {route.params.name}'s profile!</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate("Message Stack",
-            {
-              screen: "Send Message Screen",
-              initial: false,
-              params: {recipientName: route.params.name}
-            }
-          );
-        }}>
-        <Text>Send {route.params.name} a message</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-// ALL MESSAGES SCREEN
-
-const fakeMessages = [
-  {id: "0_1_0", senderName: "Jeff", recipientName: "Alex", text: "Hello how are you?"},
-  {id: "0_1_1", senderName: "Jeff", recipientName: "Alex", text: "Did you get my message?"},
-  {id: "160_170_0", senderName: "Ammar", recipientName: "Jeff", text: "Let's get a bitiykh!"}
-];
-
-function AllMessagesScreen({ navigation, route }) {
-  const renderMessage = ({ item }) => { 
-    console.log(item);
-    const shortText = item.text.slice(0,10) + "...";
-    return (
-      <View style={styles.searchResult}>
-        <Text>From {item.senderName}: {shortText}</Text>
-      </View>
-    );
-  };
-  return (
-    <View>
-      <Text style={styles.uiText}>Here are your messages :)</Text>
-      <FlatList
-        data={fakeMessages}
-        renderItem={renderMessage}
-        style={{height:"80%", padding: 5}}
-        ItemSeparatorComponent={MyItemSeparator}
-      />
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Send Message Screen", {recipientName: ""});
-        }}
-        style={styles.button}
-      >
-        <Text>Send New Message</Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-// READ MESSAGE SCREEN
-
-function ReadMessageScreen({ navigation, route }) {
-  return (
-    <View>
-      <Text>Here is the message from {route.params.message.senderName}: Hi!</Text>
-    </View>
-  )
-}
-
-// SEND MESSAGE SCREEN
-
-function SendMessageScreen({ navigation, route }) {
-  return (
-    <View>
-      <View style={[styles.uiText, {flex: 2, flexDirection: "row"}]}>
-        <Text style={{fontSize: 18}}>Message To: </Text>
-        <TextInput 
-          value={route.params.recipientName}
-          style={styles.usernameInput}
-        >
-        </TextInput>
-      </View>
-      <View
-        style={{
-          borderBottomColor: 'black',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          marginBottom: 5
-        }}
-      />
-      <TextInput
-        style={styles.messageBox}
-        multiline={true}
-      >
-      </TextInput>
-      <TouchableOpacity style={styles.button}>
-        <Text>Send Message</Text>
-      </TouchableOpacity>
     </View>
   )
 }
@@ -305,7 +210,7 @@ function ProfileStackScreen({ navigation, route}) {
 // SEARCH STACK
 
 const SearchStack = createNativeStackNavigator();
-function SearchStackScreen({ navigation, route }) {
+function SearchStackScreen({ navigation, route}) {
   return (
     <SearchStack.Navigator>
       <SearchStack.Screen name="Search Screen" component={SearchScreen} />
@@ -313,19 +218,6 @@ function SearchStackScreen({ navigation, route }) {
       <SearchStack.Screen name="View Result Screen" component={ViewResultScreen} />
     </SearchStack.Navigator>
   )
-}
-
-// MESSAGE STACK
-
-const MessageStack = createNativeStackNavigator();
-function MessageStackScreen({ navigation, route }) {
-  return (
-    <MessageStack.Navigator>
-      <MessageStack.Screen name="All Messages Screen" component={AllMessagesScreen} />
-      <MessageStack.Screen name="Read Message Screen" component={ReadMessageScreen} />
-      <MessageStack.Screen name="Send Message Screen" component={SendMessageScreen} />
-    </MessageStack.Navigator>
-  );
 }
 
 // TABS
@@ -342,11 +234,6 @@ function AppTabs() {
       <Tabs.Screen
         name='Search Stack'
         component={SearchStackScreen}
-        options={{headerShown: false}}
-      />
-      <Tabs.Screen
-        name='Message Stack'
-        component={MessageStackScreen}
         options={{headerShown: false}}
       />
     </Tabs.Navigator>
@@ -395,16 +282,6 @@ const styles = StyleSheet.create({
     height: 300,
     width: 300,
   },
-  messageBox: {
-    width: "99%",
-    fontSize: 14,
-    height: 100,
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 5,
-    margin: 5,
-  },
   resultList: {
     width: "100%"
   },
@@ -414,13 +291,5 @@ const styles = StyleSheet.create({
   },
   spinner: {
     alignItems: 'center',
-  },
-  uiText: {
-    padding: 5,
-    margin: 5
-  },
-  usernameInput: {
-    backgroundColor: 'white',
-    fontSize: 20
   }
 });
